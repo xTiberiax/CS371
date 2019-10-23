@@ -2,6 +2,7 @@ import java.util.*;
 
 
 public class PJShell{
+	public String cwd = "";
 
 	public static int ls_method(String args[], int current_word){
 		String path = ".";
@@ -9,6 +10,14 @@ public class PJShell{
 			path = args[current_word++];
 		}
 		// do list printing and exceptions here
+
+
+
+		File listing_dir = new File(path);
+		File 
+
+
+
 		System.out.println(" listing current children in directory: " + path);
 		return current_word;
 	}
@@ -92,6 +101,21 @@ public class PJShell{
 		return current_word;
 	}
 
+	public static int cd_method(String args[], int current_word){
+		String path = "";
+
+		if (current_word < args.length){
+			path = args[current_word++];
+			// verify path here
+			
+		} else {
+			// throw no-path exception
+			System.out.println(" Error: You must provide a path to move to");
+		}
+
+		return current_word;
+	}
+
 
 
 	public static void ShellCommand(String args[]){
@@ -118,6 +142,9 @@ public class PJShell{
 			} else if (args[current_word].equals("rmdir")){
 				current_word = rmdir_method(args, ++current_word);
 				
+			} else if (args[current_word].equals("cd")){
+				current_word = cd_method(args, ++current_word);
+
 			} else if (args[current_word].equals(";")){
 				// go through another execution cycle
 				// right now its just an ignore
@@ -133,6 +160,7 @@ public class PJShell{
 	public static void main(String args[]){
 		Scanner keyboard = new Scanner(System.in);
 		String shell_args[] = args;
+		cwd = "~";
 
 		while(shell_args.length == 0 || !shell_args[0].equals("exit")){
 			ShellCommand(shell_args);
