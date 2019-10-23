@@ -9,7 +9,7 @@ public class PJShell{
 			path = args[current_word++];
 		}
 		// do list printing and exceptions here
-		System.out.println("listing current children in directory: " + path);
+		System.out.println(" listing current children in directory: " + path);
 		return current_word;
 	}
 
@@ -21,26 +21,75 @@ public class PJShell{
 			} else {
 				rm_path = args[current_word++];
 				// do removal
-				System.out.println("removing file: " + rm_path);
+				System.out.println(" removing file: " + rm_path);
 			}
 		}
 		if (rm_path.equals("")){
-			// throw no path exception
+			// throw no-path exception
 			System.out.println(" Error: You must provide a file path to remove");
 		}
 		return current_word;
 	}
 
 	public static int cp_method(String args[], int current_word){
-		return 0;
+		String from_path = "";
+		String to_path = "";
+
+		if (current_word < args.length){
+			from_path = args[current_word++];
+		}
+		if (current_word < args.length){
+			to_path = args[current_word++];
+		}
+
+		if (from_path.equals("")){
+			// throw no-path exception
+			System.out.println(" Error: You must provide a path to copy from");
+		}
+
+		// if from_path is empty, to_path will always be ""
+		if (to_path.equals("")){
+			// throw no-path exception
+			System.out.println(" Error: You must provide a path to copy to");
+		} else {
+			// do copy here
+			System.out.println(" copying from: " + from_path 
+				+ " to: " + to_path);
+		}
+		
+		return current_word;
 	}
 
 	public static int mkdir_method(String args[], int current_word){
-		return 0;
+		String new_path = "";
+
+		while (current_word < args.length){
+			if (args[current_word].equals(";")){
+				break;
+			}
+
+			new_path = args[current_word++];
+			// verify path here
+			// make the directory here
+			System.out.println(" making directory: " + new_path);
+		}
+		return current_word;
 	}
 
 	public static int rmdir_method(String args[], int current_word){
-		return 0;
+		String rm_path = "";
+
+		while (current_word < args.length){
+			if (args[current_word].equals(";")){
+				break;
+			}
+			rm_path = args[current_word++];
+			// verify path here
+			// remove the directory here
+			// this may require a recursive removal function
+			System.out.println(" removing directory: " + rm_path);
+		}
+		return current_word;
 	}
 
 
@@ -71,6 +120,7 @@ public class PJShell{
 				
 			} else if (args[current_word].equals(";")){
 				// go through another execution cycle
+				// right now its just an ignore
 			} else {
 				// dont recognize a command. For now, just ignore it
 				current_word++;
@@ -89,9 +139,9 @@ public class PJShell{
 			shell_args = keyboard.nextLine().split(" ");
 		}
 
-		System.out.println(
-			"~~~~~~~~~~~~~~~~~\nThank you for using pjshell\n~~~~~~~~~~~~~~~~~"
-			);
+		System.out.println("* * * * * * * * * * * * * * *\n");
+		System.out.println("Thank you for using PJShell!\n");
+		System.out.println("* * * * * * * * * * * * * * *");
 	}
 
 }
