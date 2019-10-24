@@ -17,7 +17,13 @@ public class PJShell{
 		// gather names of files and directories in that path
 		// print them
 
-		System.out.println(" listing current children in directory: " + path);
+		File tempfile = new File(cd_helper(cwd, path));
+		ArrayList<String> contents = new ArrayList<String>(Arrays.asList(tempfile.list()));
+
+		for (int i=0;i<contents.size();i++){
+			System.out.println(contents.get(i));
+		}
+
 		return current_word;
 	}
 
