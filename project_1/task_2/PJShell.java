@@ -1,5 +1,10 @@
 import java.util.*;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 
 public class PJShell{
@@ -11,11 +16,6 @@ public class PJShell{
 		if (current_word < args.length){
 			path = args[current_word++];
 		}
-		// do list printing and exceptions here
-		// validate path here
-		// make a local cwd variable to store public cwd + path
-		// gather names of files and directories in that path
-		// print them
 
 		File tempfile = new File(cd_helper(cwd, path));
 		ArrayList<String> contents = new ArrayList<String>(
@@ -45,7 +45,6 @@ public class PJShell{
 			}
 		}
 		if (rm_path.equals("")){
-			// throw no-path exception
 			System.out.println(" Error: You must provide a file path to remove");
 		}
 		return current_word;
@@ -63,18 +62,42 @@ public class PJShell{
 		}
 
 		if (from_path.equals("")){
-			// throw no-path exception
 			System.out.println(" Error: You must provide a path to copy from");
 		}
 
 		// if from_path is empty, to_path will always be ""
 		if (to_path.equals("")){
-			// throw no-path exception
 			System.out.println(" Error: You must provide a path to copy to");
 		} else {
 			// do copy here
-			System.out.println(" copying from: " + from_path 
-				+ " to: " + to_path);
+			InputStream inStream = null;
+			OutputStream outStream = null;
+
+			try{
+				
+				File from_file =new File(cd_helper(cwd, from_path));
+			    File to_file =new File(cd_helper(cwd, to_path));
+
+			    if (!from_file.exists() || from_file.isDirectory()){
+			    	System.out.println(" Error: the file copying from does not exist");
+			    }
+				
+			    inStream = new FileInputStream(from_file);
+			    outStream = new FileOutputStream(to_file);
+		    	
+			    byte[] buffer = new byte[1024];
+				
+			    int length;
+			    //copy the file content in bytes 
+			    while ((length = inStream.read(buffer)) > 0){
+			    	outStream.write(buffer, 0, length);
+			    }
+			 
+			    inStream.close();
+			    outStream.close();
+		    }catch(IOException e){
+	    		e.printStackTrace();
+	    	}
 		}
 		
 		return current_word;
@@ -109,7 +132,7 @@ public class PJShell{
 			if (content.isDirectory()){				// recursive case
 				rmdir_helper(content.getAbsolutePath());
 			}
-			content.delete();
+			content.delete();						// base case
 		}
 	}
 
@@ -121,12 +144,8 @@ public class PJShell{
 				break;
 			}
 			rm_path = args[current_word++];
-			// validate path here
-			// remove the directory here
-			// this may require a recursive removal function
 			File dir_to_del = new File(cd_helper(cwd, rm_path));
 			if (dir_to_del.exists() && dir_to_del.isDirectory()){
-				// recursive delete
 				rmdir_helper(dir_to_del.getAbsolutePath());
 				dir_to_del.delete();
 			} else {
@@ -190,9 +209,9 @@ public class PJShell{
 		if (current_word < args.length){
 			path = args[current_word++];
 			// validate path here
-			File tempfile = new File(cd_helper(cwd, path));
-			if (tempfile.exists()){
-				cwd = cd_helper(cwd, path);	
+			File move_to = new File(cd_helper(cwd, path));
+			if (move_to.exists() && move_to.isDirectory()){
+				cwd = move_to.getAbsolutePath();	
 			} else {
 				System.out.println(" Error: That path does not exist");
 			}
@@ -208,10 +227,6 @@ public class PJShell{
 
 	public static void ShellCommand(String args[]){
 		int current_word = 0;
-
-		// for (int i=0;i<args.length;i++){
-		// 	System.out.println(args[i]);
-		// }
 
 		while(current_word < args.length){
 
@@ -237,8 +252,10 @@ public class PJShell{
 				// go through another execution cycle
 				// right now its just an ignore
 			} else {
-				// dont recognize a command. For now, just ignore it
-				current_word++;
+				// dont recognize a command
+				System.out.println(" Error: Command '" + args[current_word] + "' is invalid");
+				System.out.println(" use 'exit' to quit pjshell");
+				break;
 			}
 		} 
 
@@ -261,5 +278,4 @@ public class PJShell{
 		System.out.println("*   *   *   *   *   *   *   *");
 		System.out.println("  *   *   *   *   *   *   *  ");
 	}
-
 }
