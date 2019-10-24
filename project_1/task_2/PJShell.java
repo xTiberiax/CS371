@@ -18,12 +18,14 @@ public class PJShell{
 		// print them
 
 		File tempfile = new File(cd_helper(cwd, path));
-		ArrayList<String> contents = new ArrayList<String>(Arrays.asList(tempfile.list()));
+		ArrayList<String> contents = new ArrayList<String>(
+			Arrays.asList(tempfile.list())
+			);
 
 		for (int i=0;i<contents.size();i++){
 			System.out.println(contents.get(i));
 		}
-
+		System.out.println();
 		return current_word;
 	}
 
@@ -217,9 +219,9 @@ public class PJShell{
 			shell_args = keyboard.nextLine().split(" ");
 		}
 
-		System.out.println("* * * * * * * * * * * * * * *\n");
+		System.out.println("\n* * * * * * * * * * * * * * *\n");
 		System.out.println("Thank you for using PJShell!\n");
-		System.out.println("* * * * * * * * * * * * * * *");
+		System.out.println("* * * * * * * * * * * * * * *\n");
 	}
 
 }
