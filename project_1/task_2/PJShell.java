@@ -85,9 +85,12 @@ public class PJShell{
 			}
 
 			new_path = args[current_word++];
-			// validate path here
-			// make the directory here
-			System.out.println(" making directory: " + new_path);
+			File tempfile = new File(cd_helper(cwd, new_path));
+			if (tempfile.exists()){
+				System.out.println(" Error: This directory already exists");
+			} else {
+				tempfile.mkdir();
+			}
 		}
 		return current_word;
 	}
@@ -138,12 +141,16 @@ public class PJShell{
 		}
 
 		// now build the string and return it
-		String new_path = "";
+		String new_path = "/";
 		for (int i=0;i<base.size();i++){
 			if (!base.get(i).equals("")){
-				new_path = new_path + "/" + base.get(i);
+				new_path = new_path + base.get(i);
+				if (i < base.size()-1){
+					new_path = new_path + "/";
+				}
 			}
 		}
+		// System.out.println(" testing path: " + new_path);
 		return new_path;
 	}
 
@@ -212,7 +219,7 @@ public class PJShell{
 	public static void main(String args[]){
 		Scanner keyboard = new Scanner(System.in);
 		String shell_args[] = args;
-		cwd = System.getProperty("user.dir");
+		cwd = cwd + System.getProperty("user.dir");
 
 		while(shell_args.length == 0 || !shell_args[0].equals("exit")){
 			ShellCommand(shell_args);
