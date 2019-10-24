@@ -36,8 +36,12 @@ public class PJShell{
 				break;
 			} else {
 				rm_path = args[current_word++];
-				// do removal
-				System.out.println(" removing file: " + rm_path);
+				File tempfile = new File(cd_helper(cwd, rm_path));
+				if (tempfile.exists() && !tempfile.isDirectory()){
+					tempfile.delete();
+				} else {
+					System.out.println(" Error: this file does not exist");
+				}
 			}
 		}
 		if (rm_path.equals("")){
@@ -95,6 +99,20 @@ public class PJShell{
 		return current_word;
 	}
 
+	public static void rmdir_helper(String ext_cwd){
+		File current_root = new File(ext_cwd);
+		ArrayList<String> contents = new ArrayList<String>(Arrays.asList(current_root.list()));
+		File content;
+
+		for (int i=0;i<contents.size();i++){
+			content = new File(cd_helper(current_root.getAbsolutePath(), contents.get(i)));
+			if (content.isDirectory()){				// recursive case
+				rmdir_helper(content.getAbsolutePath());
+			}
+			content.delete();
+		}
+	}
+
 	public static int rmdir_method(String args[], int current_word){
 		String rm_path = "";
 
@@ -106,7 +124,14 @@ public class PJShell{
 			// validate path here
 			// remove the directory here
 			// this may require a recursive removal function
-			System.out.println(" removing directory: " + rm_path);
+			File dir_to_del = new File(cd_helper(cwd, rm_path));
+			if (dir_to_del.exists() && dir_to_del.isDirectory()){
+				// recursive delete
+				rmdir_helper(dir_to_del.getAbsolutePath());
+				dir_to_del.delete();
+			} else {
+				System.out.println(" Error: This directory does not exist");
+			}
 		}
 		return current_word;
 	}
@@ -141,16 +166,21 @@ public class PJShell{
 		}
 
 		// now build the string and return it
-		String new_path = "/";
+		String new_path = "";
 		for (int i=0;i<base.size();i++){
-			if (!base.get(i).equals("")){
-				new_path = new_path + base.get(i);
-				if (i < base.size()-1){
-					new_path = new_path + "/";
-				}
+			if (!(base.get(i).equals("") || base.get(i).equals("."))){
+				// if (i < base.size()){
+				// 	new_path = new_path ;
+				// }
+				new_path = new_path + "/" + base.get(i);
+				
 			}
+			// System.out.println(" building: " + new_path);
 		}
 		// System.out.println(" testing path: " + new_path);
+		if (new_path.equals("")){
+			new_path = new_path + "/";
+		}
 		return new_path;
 	}
 
@@ -225,10 +255,11 @@ public class PJShell{
 			ShellCommand(shell_args);
 			shell_args = keyboard.nextLine().split(" ");
 		}
-
-		System.out.println("\n* * * * * * * * * * * * * * *\n");
-		System.out.println("Thank you for using PJShell!\n");
-		System.out.println("* * * * * * * * * * * * * * *\n");
+		System.out.println("  *   *   *   *   *   *   *  ");
+		System.out.println("*   *   *   *   *   *   *   *");
+		System.out.println(" Thank you for using PJShell!");
+		System.out.println("*   *   *   *   *   *   *   *");
+		System.out.println("  *   *   *   *   *   *   *  ");
 	}
 
 }
