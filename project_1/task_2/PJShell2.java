@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.lang.*;
 
 
 class PJShell2{
@@ -83,6 +84,7 @@ class PJShell2{
 	}
 
 	public static void ShellCommand(String args[]){
+		
 
 		if (args[0].equals("cd")){
 			cd_method(args, 1);
@@ -110,13 +112,21 @@ class PJShell2{
 	public static void main(String[] args) {
 		Scanner keyboard = new Scanner(System.in);
 		String shell_args[] = args;
-        System.out.print("pjshell> ");
-		shell_args = keyboard.nextLine().split(" ");
+		String commands[];
+		Boolean exit = false;
 
-		while(shell_args.length == 0 || !shell_args[0].equals("exit")){
-			ShellCommand(shell_args);
+		while(!exit){
             System.out.print("pjshell> ");
-			shell_args = keyboard.nextLine().split(" ");
+			commands = keyboard.nextLine().split(";");
+			for (int i=0;i<commands.length;i++){
+				shell_args = commands[i].trim().replaceAll("\\s+", " ").split(" ");
+
+				if (shell_args.length > 0 && shell_args[0].equals("exit")){
+					exit = true;
+				} else if (shell_args.length > 0 && !shell_args[0].equals("")){
+					ShellCommand(shell_args);
+				}
+			}
 		}
 		System.out.println("  *   *   *   *   *   *   *  ");
 		System.out.println("*   *   *   *   *   *   *   *");
