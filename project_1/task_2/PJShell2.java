@@ -1,8 +1,4 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 import java.lang.*;
 
@@ -104,6 +100,8 @@ class PJShell2{
 	            System.out.println(line);
             }
 
+        } catch (IOException ioex){
+        	System.out.println(" Error: command not found");
         } catch (Exception ex) {
 	        System.out.println(ex);
 	    }
@@ -130,14 +128,12 @@ class PJShell2{
 					}
 				}
             } catch (NoSuchElementException nsex){
-            	System.out.println("~~~" + nsex);
+            	System.out.println();
             	break;
             } catch (Exception ex){
             	System.out.println(ex);
             	break;
             }
-			
-			
 		}
 		System.out.println("  *   *   *   *   *   *   *  ");
 		System.out.println("*   *   *   *   *   *   *   *");
