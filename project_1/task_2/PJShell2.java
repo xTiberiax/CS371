@@ -33,7 +33,11 @@ class PJShell2{
 					base.pop();
 				}
 			} else if (target.get(i).equals("~")){
+				String home_arr[] = HOME.split("/");
 				base.clear();
+				for (int j=0;j<home_arr.length;j++){
+					base.push(home_arr[j]);
+				}
 			} else {
 				base.push(target.get(i));
 			}
