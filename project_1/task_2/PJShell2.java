@@ -117,16 +117,27 @@ class PJShell2{
 
 		while(!exit){
             System.out.print("pjshell> ");
-			commands = keyboard.nextLine().split(";");
-			for (int i=0;i<commands.length;i++){
-				shell_args = commands[i].trim().replaceAll("\\s+", " ").split(" ");
 
-				if (shell_args.length > 0 && shell_args[0].equals("exit")){
-					exit = true;
-				} else if (shell_args.length > 0 && !shell_args[0].equals("")){
-					ShellCommand(shell_args);
+            try {
+            	commands = keyboard.nextLine().split(";");
+            	for (int i=0;i<commands.length;i++){
+					shell_args = commands[i].trim().replaceAll("\\s+", " ").split(" ");
+
+					if (shell_args.length > 0 && shell_args[0].equals("exit")){
+						exit = true;
+					} else if (shell_args.length > 0 && !shell_args[0].equals("")){
+						ShellCommand(shell_args);
+					}
 				}
-			}
+            } catch (NoSuchElementException nsex){
+            	System.out.println("~~~" + nsex);
+            	break;
+            } catch (Exception ex){
+            	System.out.println(ex);
+            	break;
+            }
+			
+			
 		}
 		System.out.println("  *   *   *   *   *   *   *  ");
 		System.out.println("*   *   *   *   *   *   *   *");
